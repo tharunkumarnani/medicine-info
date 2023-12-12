@@ -126,7 +126,7 @@ class CreateDisease extends Component{
 
     onFailure=()=>(
         <div className='succeeded-msg'>
-            <p className='des'>Some Details Are Empty</p>
+            <p className='des'>Hey Bhavana, Some Details Are Empty</p>
             <button className='add-another-btn' type='button' onClick={this.addOneMore}>Try Again</button>
         </div>
     )

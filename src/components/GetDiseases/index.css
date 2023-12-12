@@ -14,7 +14,7 @@
     padding: 5px;
     height: 32px;
     width: 300px;
-    border: #323f4b 1px solid;
+    border: #ffffff 1px solid;
     border-radius: 5px;
 }
 .search{
@@ -31,6 +31,14 @@
     height: 23px;
     width: 25px;
 }
+.card{
+    min-height: 60vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
 .success{
     background-color: #ffffff;
     min-height: 40vh;
@@ -38,6 +46,7 @@
 .disease-list{
     list-style-type: none;
     padding: 0;
+    width: 60%;
 }
 .empty-disease{
     display: flex;
@@ -77,4 +86,29 @@
     width: 40px;
     height: 40px;
     border-radius: 10px;
+}
+.failed{
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.retry-btn{
+    padding: 10px 20px;
+    font-size: 20px;
+    border-radius: 5px;
+    border: 0;
+    cursor: pointer;
+    background-color: #328af2;
+    color: #ffffff;
+    
+}
+
+@media (max-width:768px){
+    .disease-list{
+        width: 100%;
+    }
+    .failed{
+        width: 90%;
+    }
 }

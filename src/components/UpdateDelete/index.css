@@ -16,6 +16,7 @@
     border-radius: 5px;
     padding: 5px;
     background-color: #000000;
+    cursor: pointer;
 
 }
 .form-style{
@@ -28,7 +29,6 @@
 }
 .label-style{
     margin-bottom: 5px;
-
 }
 .input-style{
     outline: none;

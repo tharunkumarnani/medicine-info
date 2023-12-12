@@ -1,5 +1,6 @@
 import {Component} from 'react'
 import { IoMdSearch } from "react-icons/io";
+import {ThreeDots} from 'react-loader-spinner'
 import DiseaseItem from '../DiseaseItem'
 import './index.css'
 
@@ -46,11 +47,18 @@ class GetDiseases extends Component{
     }
     
     onLoading=()=>(
-        <div className='loading'>Loading.....</div>
+        <div className='loading'>
+            <ThreeDots type="ThreeDots" color="#ffffff" width={80} height={50} /> 
+        </div>
     )
 
     onFailed=()=>(
-        <div className='failed'>Something went wrong.....</div>
+        <div className='failed'>
+            <img className='fail-img' alt="failure img" src="https://assets.ccbp.in/frontend/react-js/projects-showcase/failure-img.png"/>
+            <h1 className='fail-head'>Oops! Something Went Wrong..</h1>
+            <p className='des'>We cannot seem to find the page you are looking for.</p>
+            <button className='retry-btn' type="button" onClick={this.getdiseases}>Retry</button>
+        </div>
     )
 
     onEmptyDisease=()=>{
@@ -107,10 +115,10 @@ class GetDiseases extends Component{
         return (
             <div className='home'>
                 <div className='search-cont'>
-                <input onChange={this.onChangeSearch} value={userSearch} placeholder='Search By Disease Name' className='search' type="search" />
-                <IoMdSearch className='search-icon' />
+                    <input onChange={this.onChangeSearch} value={userSearch} placeholder='Search By Disease Name' className='search' type="search" />
+                    <IoMdSearch className='search-icon' />
                 </div>
-                {this.onInitial()}
+                <div className='card'>{this.onInitial()}</div>
             </div>
         )
     }
