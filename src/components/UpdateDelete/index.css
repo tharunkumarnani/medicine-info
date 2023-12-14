@@ -38,6 +38,17 @@
     font-size: 17px;
     width: 100%;
 }
+.succeeded-msg{
+    width: 60%;
+    background-color: #323f4b;
+    border-radius: 7px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 40vh;
+}
 
 .submit-btn{
     background-color: blue;

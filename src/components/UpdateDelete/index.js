@@ -1,4 +1,6 @@
 import {Component} from 'react'
+import {ThreeDots} from 'react-loader-spinner'
+
 import './index.css'
 
 const selectMethod=[
@@ -10,9 +12,15 @@ const selectMethod=[
         displayText:"Delete"
     }
 ]
+const initializeStatus={
+    initial:"INITIAL",
+    loading:"LOADING",
+    success:"SUCCESS",
+    failure:"FAILURE"
+}
 
 class UpdateDelete extends Component{
-    state={responseMsg:"",apiSuccess:false,diseaseId:"",apiMethod:selectMethod[1].methodId,imageUrl:"",videoUrl:""}
+    state={responseMsg:"",apiStatus:initializeStatus.initial,diseaseId:"",apiMethod:selectMethod[1].methodId,imageUrl:"",videoUrl:""}
 
     onChangeMethod=(event)=>{
         this.setState({apiMethod:event.target.value})
@@ -30,8 +38,15 @@ class UpdateDelete extends Component{
         this.setState({videoUrl:event.target.value})
     }
 
+    onLoading=()=>(
+        <div className='succeeded-msg'>
+            <ThreeDots type="Threedots" width={80} height={80} color="#c3cad9" />
+        </div>
+    )
+
     updateDiseaseFinal=async(event)=>{
         event.preventDefault()
+        this.setState({apiStatus:initializeStatus.loading})
         const {diseaseId,imageUrl,videoUrl}=this.state
         const diseaseIdInt=parseInt(diseaseId)
         const diseaseDetails={
@@ -41,22 +56,24 @@ class UpdateDelete extends Component{
         const options={
             method:"PUT",
             headers:{
-                'Content-Type':'Application-Json'
+                'Content-Type':'Application/Json'
 
             },
             body:JSON.stringify(diseaseDetails)
         }
         const updateUrl=`https://medical-data-ssbg.onrender.com/update-disease/${diseaseIdInt}`
         const response=await fetch(updateUrl,options)
-        const data=await response.json()
-        console.log(data)
         if (response.ok){
-            this.setState({apiSuccess:true,responseMsg:`Hi, Bhavana Reddy You are Succesfully Updated the Disease.`})
+            this.setState({apiStatus:initializeStatus.success,responseMsg:`Hi, Bhavana Reddy You are Succesfully Updated the Disease.`})
+        }
+        else{
+            this.setState({apiStatus:initializeStatus.failure})
         }
     }
 
     deleteDiseaseFinal=async(event)=>{
         event.preventDefault()
+        this.setState({apiStatus:initializeStatus.loading})
         const {diseaseId}=this.state
         const diseaseIdInt=parseInt(diseaseId)
         const options={
@@ -65,12 +82,14 @@ class UpdateDelete extends Component{
         const deleteUrl=`https://medical-data-ssbg.onrender.com/delete-disease/${diseaseIdInt}`
         const response =await fetch(deleteUrl,options)
         if (response.ok){
-            this.setState({apiSuccess:true,responseMsg:`Hi, Bhavana Reddy You are Succesfully Deleted the Disease.`})
+            this.setState({apiStatus:initializeStatus.success,responseMsg:`Hi, Bhavana Reddy You are Succesfully Deleted the Disease.`})
+        }
+        else{
+            this.setState({apiStatus:initializeStatus.failure})
         }
     }
 
     updateMethodForm=()=>{
-        console.log('Update Method')
         return (
             <form className='form-style' onSubmit={this.updateDiseaseFinal}>
                 <label htmlFor='diseaseId' className='label-style'>Enter Disease Id</label>
@@ -85,7 +104,6 @@ class UpdateDelete extends Component{
     }
 
     deleteMethodForm=()=>{
-        console.log('Delete Method')
         return (
             <form className='form-style' onSubmit={this.deleteDiseaseFinal}>
                 <label htmlFor='diseaseId' className='label-style'>Enter Disease Id</label>
@@ -108,23 +126,65 @@ class UpdateDelete extends Component{
     }
 
     modifyOneMore=()=>{
-        this.setState({apiSuccess:false})
+        this.setState({apiSuccess:initializeStatus.initial})
     }
 
-    render(){
-        const {apiMethod,apiSuccess,responseMsg}=this.state
+    onSuccess=()=>{
+        const {responseMsg}=this.state
         return (
-            <div className='bg-cont'>
-                {apiSuccess&& <> <p >{responseMsg}</p>
-                                <button className='add-one-more' onClick={this.modifyOneMore}>Modify One More</button></>}
-                {!apiSuccess&& <><select onChange={this.onChangeMethod} className='select-style' value={apiMethod}>
+            <div className='succeeded-msg'>
+            <p >{responseMsg}</p>
+            <button className='add-one-more' onClick={this.modifyOneMore}>Modify One More</button>
+            </div>
+        )
+    }
+    
+
+    tryAgain=()=>{
+        this.setState({apiStatus:initializeStatus.initial})
+    }
+
+    onFailure=()=>(
+        <div className='succeeded-msg'>
+        <p >Something Went Wrong</p>
+        <button className='add-one-more' onClick={this.tryAgain}>Try Again</button>
+        </div>
+    )
+
+    onInitialShow=()=>{
+        const {apiMethod}=this.state
+        return (
+            <><select onChange={this.onChangeMethod} className='select-style' value={apiMethod}>
                     {selectMethod.map(each=><option value={each.methodId} key={each.methodId}>{each.displayText}</option>)}
                 </select>
                 <h1 className='method'>{apiMethod} Disease</h1>
                 {this.methodRender()}
-                </>
+            </>
+        )
+    }
+    
 
+    initializeDisplay=()=>{
+        const {apiStatus}=this.state
+        switch (apiStatus){
+            case initializeStatus.initial:
+                return this.onInitialShow()
+            case initializeStatus.loading:
+                return this.onLoading()
+            case initializeStatus.success:
+                return this.onSuccess()
+            case initializeStatus.failure:
+                return this.onFailure()
+            default :
+                return null
         }
+    }
+
+    render(){
+        
+        return (
+            <div className='bg-cont'>
+                {this.initializeDisplay()}
             </div>
         )
     }
