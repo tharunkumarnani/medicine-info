@@ -126,7 +126,7 @@ class UpdateDelete extends Component{
     }
 
     deleteMethodForm=()=>{
-        const {adminPasscode}=this.state
+        
         return (
             <form className='form-style' onSubmit={this.deleteDiseaseFinal}>
                 <label htmlFor='diseaseId' className='label-style'>Enter Disease Id</label>
