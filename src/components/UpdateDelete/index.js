@@ -19,8 +19,29 @@ const initializeStatus={
     failure:"FAILURE"
 }
 
+
 class UpdateDelete extends Component{
-    state={responseMsg:"",apiStatus:initializeStatus.initial,diseaseId:"",apiMethod:selectMethod[1].methodId,imageUrl:"",videoUrl:""}
+    state={diseasesData:[],adminPasscode:"",responseMsg:"",apiStatus:initializeStatus.initial,diseaseId:"",apiMethod:selectMethod[1].methodId,imageUrl:"",videoUrl:""}
+
+    componentDidMount(){
+        this.getDiseasesData()
+    }
+
+    getDiseasesData=async() => {
+        const options={
+            method:"GET",
+            headers:{
+                "Content-Type":"Application/json"
+            }
+        }
+        const res=await fetch("https://medical-data-ssbg.onrender.com/get-diseases",options)
+        
+        if(res.ok){
+            const data=await res.json()
+            this.setState({diseasesData:data})
+        }
+
+    }
 
     onChangeMethod=(event)=>{
         this.setState({apiMethod:event.target.value})
@@ -90,6 +111,7 @@ class UpdateDelete extends Component{
     }
 
     updateMethodForm=()=>{
+        
         return (
             <form className='form-style' onSubmit={this.updateDiseaseFinal}>
                 <label htmlFor='diseaseId' className='label-style'>Enter Disease Id</label>
@@ -104,11 +126,13 @@ class UpdateDelete extends Component{
     }
 
     deleteMethodForm=()=>{
+        const {adminPasscode}=this.state
         return (
             <form className='form-style' onSubmit={this.deleteDiseaseFinal}>
                 <label htmlFor='diseaseId' className='label-style'>Enter Disease Id</label>
-                <input id="diseaseId" className='input-style' placeholder='Enter ID' onChange={this.onChangeDiseaseId} />
+                <input required id="diseaseId" className='input-style' placeholder='Enter ID' onChange={this.onChangeDiseaseId} />
                 <button className='submit-btn' type="submit" >Delete</button>
+                
             </form>
         )
     }
@@ -152,15 +176,23 @@ class UpdateDelete extends Component{
     )
 
     onInitialShow=()=>{
-        const {apiMethod}=this.state
+        const {apiMethod,adminPasscode,diseasesData}=this.state
+        const isAdmin=adminPasscode===process.env.REACT_APP_ADMIN_PASSWORD
+        if(isAdmin){
+            console.log(diseasesData)
+        }
         return (
             <><select onChange={this.onChangeMethod} className='select-style' value={apiMethod}>
                     {selectMethod.map(each=><option value={each.methodId} key={each.methodId}>{each.displayText}</option>)}
                 </select>
-                <h1 className='method'>{apiMethod} Disease</h1>
-                {this.methodRender()}
+                <h1 className='method'>{apiMethod} Disease Form</h1>
+                {isAdmin && this.methodRender()}
             </>
         )
+    }
+
+    onChangeAdminPassword=(e)=>{
+        this.setState({adminPasscode:e.target.value})
     }
     
 
@@ -183,7 +215,11 @@ class UpdateDelete extends Component{
     render(){
         
         return (
-            <div className='bg-cont'>
+            <div className='bg-cont2'>
+                <div className='form-style2'>
+                    <label className='label-style'>Enter Admin Password to access the Forms</label>
+                    <input className='input-style' placeholder='Enter admin password' type='password' onChange={this.onChangeAdminPassword}/>
+                </div>
                 {this.initializeDisplay()}
             </div>
         )

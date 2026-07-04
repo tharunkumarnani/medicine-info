@@ -1,3 +1,10 @@
+.not-found-cont{
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
 .empty-disease{
     display: flex;
     flex-direction: column;
@@ -6,6 +13,7 @@
     color: #ffffff;
     font-family: Roboto;
     padding: 20px;
+    max-width: 60%;
 
 }
 .not-found-img{
@@ -18,5 +26,7 @@
     background-color: transparent;
     cursor: pointer;
     border-radius: 8px;
+    color: #000000;
+    text-decoration: none;
 
 }
