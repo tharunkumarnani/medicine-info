@@ -4,6 +4,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+
 }
 .empty-disease{
     display: flex;
@@ -15,6 +16,9 @@
     padding: 20px;
     max-width: 60%;
 
+}
+.not-found-heading{
+    color: #323f4b;
 }
 .not-found-img{
     width: 60%;

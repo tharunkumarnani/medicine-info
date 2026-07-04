@@ -28,12 +28,12 @@ class GetDiseases extends Component{
         }
         const url="https://medical-data-ssbg.onrender.com/get-diseases"
         const response=await fetch(url,options)
-        const data=await response.json()
-        if (response.ok){
+        if (response.ok===true){
+            const data=await response.json()
             const updateData=data.map(each=>({
                 id:each.id,
                 imageUrl:each.disease_image_url,
-                diseaseName:each.disease_name,
+                diseaseName:each.disease_name.toUpperCase(),
                 diseaseSource:each.disease_source,
                 byInjection:each.medication_by_injection,
                 byTablets:each.medication_by_tablets,
@@ -42,6 +42,7 @@ class GetDiseases extends Component{
             }))
             this.setState({diseaseList:updateData,status:serverStatus.success})
         }else{
+            console.log("else block")
             this.setState({status:serverStatus.failed})
         }
     }
@@ -54,24 +55,26 @@ class GetDiseases extends Component{
 
     onFailed=()=>(
         <div className='failed'>
+            <>
             <img className='fail-img' alt="failure img" src="https://assets.ccbp.in/frontend/react-js/projects-showcase/failure-img.png"/>
             <h1 className='fail-head'>Oops! Something Went Wrong..</h1>
             <p className='des'>We cannot seem to find the page you are looking for.</p>
             <button className='retry-btn' type="button" onClick={this.getdiseases}>Retry</button>
+            </>
         </div>
     )
 
     onEmptyDisease=()=>{
         const {userSearch}=this.state
         return (
-            <div className='empty-disease'>
-                <img alt="not found" className='not-found-img' src="https://assets.ccbp.in/frontend/react-js/ebank-not-found-img.png"/>
-                <h1 className='not-found-heading'>Are you not finding the disease you are looking for? </h1>
-                <p className=''>Dont lose hope click the below request the disease button.</p>
+            <div className='empty-disease-card'>
+                <img alt="Not Found" className='not-found-img' src="https://assets.ccbp.in/frontend/react-js/ebank-not-found-img.png"/>
+                <h1 className='not-found-heading2'>Are you not finding the disease you are looking for? </h1>
+                <p className='ntf-des'>Don't lose hope, suggest me to add.</p>
                 <button type='button' className="add-request-wtapp">
                     
-                    <a href={`https://wa.me/916302543583?text=Add%20this%20Disease%20${userSearch}`} className='link'>
-                        <p className='descrip'>Request The Disease</p>
+                    <a href={`https://wa.me/916302543583?text=Add%20this%20Disease,%20${userSearch}`} className='link'>
+                        <p className='descrip'>Suggest The Disease</p>
                         <img alt='whatsapp' className='wt-logo' src="https://eu-images.contentstack.com/v3/assets/blt6d90778a997de1cd/bltf26ad58ff670f528/64f1596bbe19834065d99176/whatsapp_solomon7_shutterstock.jpg?width=850&auto=webp&quality=95&format=jpg&disable=upscale"/>
                     </a>
                 </button>
@@ -111,13 +114,17 @@ class GetDiseases extends Component{
         }
     }
     render(){
-        const {userSearch}=this.state
+        const {userSearch,status}=this.state
         return (
             <div className='home'>
+                {status===serverStatus.success?
                 <div className='search-cont'>
                     <input onChange={this.onChangeSearch} value={userSearch} placeholder='Search By Disease Name' className='search' type="search" />
                     <IoMdSearch className='search-icon' />
                 </div>
+                :
+                ""}
+                
                 <div className='card'>{this.onInitial()}</div>
             </div>
         )

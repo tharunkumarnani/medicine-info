@@ -31,7 +31,7 @@ const DiseaseItem=(props)=>{
     return (
         <li className='item-style'>
             <LeftPart index={index}>
-                <img src={imageUrl} className="disease-img" alt="Disease" />
+                <img src={imageUrl} className="disease-img" alt="Disease Banner" />
             </LeftPart>
             <RightPart index={index}>
                 <h1 className='heading'>{diseaseName}</h1>

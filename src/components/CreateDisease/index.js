@@ -1,4 +1,5 @@
 import {Component} from 'react'
+import {Link} from "react-router-dom"
 import {ThreeDots} from 'react-loader-spinner'
 import './index.css'
 
@@ -92,8 +93,11 @@ class CreateDisease extends Component{
         <div className='succeeded-msg'>
                     <p className='des'>Hi, Bhavana Reddy You are Succesfully Added Disease To the Database.</p>
                     <p className='des'>Do you want to add one more!</p>
+                    <div>
+                    <Link to="/" className='add-another-btn'>Home</Link>
                     <button className='add-another-btn' type='button' onClick={this.addOneMore}>Add One More</button>
-                </div>
+                    </div>
+        </div>
     )
 
     onLoading=()=>(
